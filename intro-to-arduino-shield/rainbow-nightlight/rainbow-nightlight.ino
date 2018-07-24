@@ -218,9 +218,8 @@ class WhiteLEDManager : public LEDManager {
        {@inheritDoc}
     */
     void process(const int brightness) override {
-      const float val = static_cast<float>(brightness) * BRIGHTNESS_MOD;
       const int rem = brightness % DIVISOR;
-      const int writeR = static_cast<int>(val);
+      const int writeR = brightness / DIVISOR;
 
       int writeG, writeB;
       switch (rem) {
@@ -252,7 +251,6 @@ class WhiteLEDManager : public LEDManager {
 
     // Class constants
     static const int DIVISOR = 3;
-    static constexpr float BRIGHTNESS_MOD = 1.0 / static_cast<float>(DIVISOR);
 
     // Internal object state
     const int m_r;
