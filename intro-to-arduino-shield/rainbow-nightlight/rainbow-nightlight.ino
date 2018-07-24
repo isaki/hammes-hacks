@@ -734,13 +734,8 @@ void init_next_state() {
     case 7:
       lman = new CompoundLEDManager(LED_BLUE, LED_RED);
       break;
-    case 8:
-      lman = new RainbowLEDManager(LED_RED, LED_GREEN, LED_BLUE);
-      nextState = 0;
-      break;
     default:
-      lman = new NoneLEDManager();
-      error();
+      lman = new RainbowLEDManager(LED_RED, LED_GREEN, LED_BLUE);
       nextState = 0;
       break;
   };
@@ -757,13 +752,6 @@ static int determine_led_brightness(const int sensor) {
   int ret = analogRead(sensor);
   ret = map(ret, LDR_READ_MIN, LDR_READ_MAX, VAL_HIGH, VAL_LOW);
   return constrain(ret, VAL_LOW, VAL_HIGH);
-}
-
-/**
-   Simple method for alerting you to problems.
-*/
-inline static void error() {
-  digitalWrite(LED_UNO_L, HIGH);
 }
 
 //---------- END APPLICATION METHODS ----------//
