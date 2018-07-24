@@ -553,7 +553,7 @@ static const unsigned long SHIFT_DELAY = 250;
    APPLICATION STATE
 */
 
-int nextState = 8;
+char nextState = 0;
 int prevButton;
 int currButton;
 
@@ -688,7 +688,7 @@ void init_next_state() {
 
   switch (x) {
     case 0:
-      lman = new WhiteLEDManager(LED_RED, LED_GREEN, LED_BLUE);
+      lman = new RainbowLEDManager(LED_RED, LED_GREEN, LED_BLUE);
       break;
     case 1:
       lman = new NoneLEDManager();
@@ -712,7 +712,7 @@ void init_next_state() {
       lman = new CompoundLEDManager(LED_BLUE, LED_RED);
       break;
     default:
-      lman = new RainbowLEDManager(LED_RED, LED_GREEN, LED_BLUE);
+      lman = new WhiteLEDManager(LED_RED, LED_GREEN, LED_BLUE);
       nextState = 0;
       break;
   };
