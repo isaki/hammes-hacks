@@ -168,11 +168,10 @@ class CompoundLEDManager : public LEDManager {
       // division is actually really slow.
       const int writeB = brightness >> 1;
 
-      // Since we are dealing with a divisor of 2, it is faster to do a quick
-      // bit mask than to calculate a modulus.
-      // NOTE: We are adding one as the static cast is lossy, if brightness is
-      // an odd number, our total LED output would be one less than brightness.
-      const int writeA = ((brightness & 1) == 0) ? writeB : writeB + 1;
+      // This will either be writeB if brightness was even, or writeB + 1 if
+      // brightness was odd.
+      const int writeA = brightness - writeB;
+
       analogWrite(m_a, writeA);
       analogWrite(m_b, writeB);
     }
@@ -369,29 +368,9 @@ class RainbowLEDManager : public LEDManager {
        {@inheritDoc}
     */
     void process(const int brightness) override {
-      const float bf = static_cast<float>(brightness);
-
-      // m_mod is incrementing, thus our incrementing value should be applied to
-      // our brightness. By that logic, the decrement is the 'opposite' of our
-      // increment, or for our purposes: 1.0 - m_mod. Thus, our wdf value should
-      // be (1.0 - m_mod) * bf. If we use the distributive property, we end up
-      // with bf - bf * m_mod. Since wif is equal to bf * m_mod, we can simply
-      // subtract wif from bf to get the wdf value (which makes sense, so the
-      // combined value of wif + wdf should be the total requested brightness
-      // value of bf).
-      const float wif = m_mod * bf;
-      const float wdf = bf - wif;
-
-      int writeD = static_cast<int>(wdf);
-      int writeI = static_cast<int>(wif);
-
-      // float calcs can be lossy
-      const int diff = brightness - writeD - writeI;
-      if (diff > 0) {
-        const int mod = diff >> 1;
-        writeD += ((diff & 1) == 0) ? mod : mod + 1;
-        writeI += mod;
-      }
+      const float inc = m_mod * static_cast<float>(brightness);
+      const int writeI = static_cast<int>(inc);
+      const int writeD = brightness - writeI;
 
       analogWrite(*m_dptr, writeD);
       analogWrite(*m_iptr, writeI);
