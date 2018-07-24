@@ -705,7 +705,10 @@ bool shift_callback(const unsigned long now, const unsigned long last) {
 void init_next_state() {
   const int x = nextState++;
 
-  LEDManager* tmpptr = lman;
+  if (lman != nullptr) {
+    delete lman;
+  }
+
   switch (x) {
     case 0:
       lman = new WhiteLEDManager(LED_RED, LED_GREEN, LED_BLUE);
@@ -741,11 +744,6 @@ void init_next_state() {
       nextState = 0;
       break;
   };
-
-  // Need to cleanup any old heap allocations
-  if (tmpptr != nullptr) {
-    delete tmpptr;
-  }
 }
 
 /**
