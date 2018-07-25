@@ -356,6 +356,7 @@ class RainbowLEDManager : public LEDManager {
             m_iptr = &m_g;
             m_zptr = &m_b;
             m_state = 0;
+            break;
         };
       }
 
