@@ -217,8 +217,8 @@ class WhiteLEDManager : public LEDManager {
        {@inheritDoc}
     */
     void process(const int brightness) override {
-      const int rem = brightness % DIVISOR;
       const int writeR = brightness / DIVISOR;
+      const int rem = brightness - writeR;
 
       int writeG, writeB;
       switch (rem) {
