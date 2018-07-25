@@ -477,7 +477,7 @@ class Timer {
     void execute() {
       const unsigned long now = millis();
       for (size_t i = 0; i < m_length; ++i) {
-        bool cache = m_callback[i](now, m_last[i]);
+        const bool cache = m_callback[i](now, m_last[i]);
         if (cache) {
           m_last[i] = now;
         }
