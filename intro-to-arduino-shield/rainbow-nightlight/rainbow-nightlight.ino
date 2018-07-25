@@ -490,8 +490,8 @@ class Timer {
     Timer& operator=(const Timer&) = delete;
 
     // Internal object state
-    unsigned long * m_last;
-    timefunc * m_callback;
+    unsigned long* m_last;
+    timefunc* m_callback;
     size_t m_length;
 };
 
@@ -559,7 +559,7 @@ int currButton;
 
 // Helper objects
 Timer timer;
-LEDManager * lman = nullptr;
+LEDManager* lman = nullptr;
 
 //---------- END APPLICATION STATE ----------//
 
