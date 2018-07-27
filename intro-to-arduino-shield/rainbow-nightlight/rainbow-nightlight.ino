@@ -511,9 +511,6 @@ static const int LED_RED = 6;
 static const int GND = 2;
 static const int BUTTON = 4;
 
-// UNO Built-Ins we are co-opting
-static const int LED_UNO_L = 13;
-
 //---------- END DIGITAL SETTINGS ----------//
 
 /*
@@ -614,9 +611,9 @@ void setup() {
   pinMode(VCC, OUTPUT);
   digitalWrite(VCC, HIGH);
 
-  // Debugging and error helper
-  pinMode(LED_UNO_L, OUTPUT);
-  digitalWrite(LED_UNO_L, LOW);
+  // Alternate mode notifications
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, LOW);
 
   // Base state is no voltage
   analogWrite(LED_RED, 0);
