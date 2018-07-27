@@ -570,7 +570,30 @@ LEDManager* lman = nullptr;
 
 void setup() {
 
-  // SHIELD
+  // Shield PWM Setup
+
+#if defined (__AVR_ATmega328P__)
+  // (WARN: This section is specifically for the ATmeta328P on the Aruino UNO)
+
+  // NOTE: Pins 5&6 (and millis()) run off Timer0, which is FastPWM with a
+  // CLK/64 prescaler. In contrast, Pins 3&11 run off Timer2 which uses phase
+  // correct modulation; this results in half the frequency seen from Timer0.
+  // We need to ensure our prescaled square wave frequency matches to avoid LED
+  // light jitter.
+
+  // NOTE: We do NOT touch Timer0 as this messes up timer calculations. Thus,
+  // manipulating the registers for Timer2 is our only safe option.
+
+  // From the ATmeta328P Data sheet:
+
+  // COM2A1 = 1 with COM2A0 = 0 when in FastPWM:
+  //   Clear OC2B on Compare Match, set OC2B at BOTTOM, (non-inverting mode).
+  // WGM21 | WGM20 results in a WGM2:3, which is FastPWM with 0xff max
+  // CS22: clkT2S/64 (From prescaler); this gives us the same frequency as
+  // Timer0 (used by pins 5, 6, and millis).
+  TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM21) | _BV(WGM20);
+  TCCR2B = _BV(CS22);
+#endif
 
   //Set our 3 LEDs as OUTPUT
   pinMode(LED_RED, OUTPUT);
