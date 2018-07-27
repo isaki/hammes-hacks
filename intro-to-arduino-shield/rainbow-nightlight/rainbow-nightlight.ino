@@ -218,7 +218,7 @@ class WhiteLEDManager : public LEDManager {
     */
     void process(const int brightness) override {
       const int writeR = brightness / DIVISOR;
-      const int rem = brightness - writeR;
+      const int rem = brightness - (DIVISOR * writeR);
 
       int writeG, writeB;
       switch (rem) {
