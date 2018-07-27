@@ -419,9 +419,9 @@ class RainbowLEDManager : public LEDManager {
 };
 
 /**
-  bool timefunc(unsigned long now, const unsigned long last);
+  bool timefunc(const unsigned long& now, const unsigned long& last);
 */
-typedef bool(*timefunc)(unsigned long, unsigned long);
+typedef bool(*timefunc)(const unsigned long&, const unsigned long&);
 
 /**
   Timer utility for managing asynchronous processing without the use of threads.
@@ -657,7 +657,7 @@ void loop() {
    @param last
    @return
 */
-bool debounce_callback(const unsigned long now, const unsigned long last) {
+bool debounce_callback(const unsigned long& now, const unsigned long& last) {
   const int reading = digitalRead(BUTTON);
   const bool ret = prevButton != reading;
   if (ret) {
@@ -681,7 +681,7 @@ bool debounce_callback(const unsigned long now, const unsigned long last) {
    @param last
    @return
 */
-bool shift_callback(const unsigned long now, const unsigned long last) {
+bool shift_callback(const unsigned long& now, const unsigned long& last) {
   const bool ret = (now - last) > SHIFT_DELAY;
   if (ret) {
     lman->shift();
