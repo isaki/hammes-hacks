@@ -486,6 +486,7 @@ class Timer {
     }
 
   private:
+
     // No copies!
     Timer(const Timer&) = delete;
     Timer& operator=(const Timer&) = delete;
@@ -531,7 +532,7 @@ static const int VCC = A1;
 
 // LDR_READ_MIN: The higher the value, the sooner we hit max brightness as the
 // ambient light decreases.
-static const int LDR_READ_MIN = 64;
+static const int LDR_READ_MIN = 50;
 
 // LDR_READ_MAX: The lower the value, the quicker we hit zero brightness as the
 // ambient light increases.
@@ -548,6 +549,12 @@ static const unsigned long DEBOUNCE_DELAY = 5;
 
 // Rainbow frequency
 static const unsigned long SHIFT_DELAY = 250;
+
+// Derived Constants
+
+// This constant is used to eliminate use of map which costs too many CPU cycles
+// when we know its constaints are constant
+static constexpr float LDR_MAP_FACTOR = static_cast<float>(VAL_LOW - VAL_HIGH) / static_cast<float>(LDR_READ_MAX - LDR_READ_MIN);
 
 //---------- END APPLICATION CONSTANTS ----------//
 
@@ -752,7 +759,11 @@ void init_next_state() {
 */
 static int determine_led_brightness(const int sensor) {
   int ret = analogRead(sensor);
-  ret = map(ret, LDR_READ_MIN, LDR_READ_MAX, VAL_HIGH, VAL_LOW);
+  // Due to our constant definitions, this is the equivalent of:
+  // map(ret, LDR_READ_MIN, LDR_READ_MAX, VAL_HIGH, VAL_LOW)
+  // Note that is faster than map as we eliminate the division on every read.
+  // It also uses less code space on our device.
+  ret = static_cast<int>(static_cast<float>(ret - LDR_READ_MIN) * LDR_MAP_FACTOR) + VAL_HIGH;
   return constrain(ret, VAL_LOW, VAL_HIGH);
 }
 
