@@ -527,11 +527,15 @@ static const int VCC = A1;
    APPLICATION CONSTANTS
 */
 
-// LDR Constraints
-// NOTE: I spoke to Emily, these values were based on some testing she did for
-// herself measuring resistance at different light/distances.
-static const int LDR_READ_MIN = 50;
-static const int LDR_READ_MAX = 500;
+// LDR Constraints (NOTE: Orignal values from shield designer were 50 and 500)
+
+// LDR_READ_MIN: The higher the value, the sooner we hit max brightness as the
+// ambient light decreases.
+static const int LDR_READ_MIN = 128;
+
+// LDR_READ_MAX: The lower the value, the quicker we hit zero brightness as the
+// ambient light increases.
+static const int LDR_READ_MAX = 512;
 
 // Light Pin Constraints: Digital pins have a square wave voltage controlled by
 // an 8-bit value.
