@@ -531,7 +531,7 @@ static const int VCC = A1;
 
 // LDR_READ_MIN: The higher the value, the sooner we hit max brightness as the
 // ambient light decreases.
-static const int LDR_READ_MIN = 128;
+static const int LDR_READ_MIN = 64;
 
 // LDR_READ_MAX: The lower the value, the quicker we hit zero brightness as the
 // ambient light increases.
