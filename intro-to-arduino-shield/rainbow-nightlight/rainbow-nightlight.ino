@@ -649,7 +649,13 @@ void setup() {
   init_next_state();
 
   // Register timer callbacks
+
+  // Note that on the Uno, digital pins 2 and 3 support interrupts. Our button
+  // is on pin 4. As such, we can only use a timer based approach that polls
+  // the pin state on every loop.
   timer.registerCallback(debounce_callback);
+
+  // This periodically invokes shift on the current LEDManager
   timer.registerCallback(shift_callback);
 }
 
