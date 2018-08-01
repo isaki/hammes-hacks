@@ -318,8 +318,8 @@ class RainbowLEDManager : public LEDManager {
       m_r(red),
       m_g(green),
       m_b(blue),
-      m_mod(0.0),
       m_state(0),
+      m_mod(0.0),
       m_changed(true) {
 
       // Set initial pointers
@@ -417,9 +417,9 @@ class RainbowLEDManager : public LEDManager {
     const pin_t m_g;
     const pin_t m_b;
 
-    float m_mod;
+    unsigned char m_state;
 
-    char m_state;
+    float m_mod;
 
     bool m_changed;
 
@@ -574,7 +574,7 @@ int prevButton;
 int currButton;
 
 // LED state tracking
-uint8_t nextState = 0;
+unsigned char nextState = 0;
 
 // Object State
 Timer timer;
@@ -722,7 +722,7 @@ bool shift_callback(const unsigned long& now, const unsigned long& last) {
    8: RAINBOW
 */
 void init_next_state() {
-  const uint8_t x = nextState++;
+  const unsigned char x = nextState++;
 
   if (lman != nullptr) {
     delete lman;
