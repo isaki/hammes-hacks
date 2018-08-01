@@ -18,8 +18,19 @@
 */
 
 /*
-   STRUCTS/CLASSES/ENUMS
+  CLASSES/TYPES
 */
+
+/**
+   This is the type used for pin addressing.
+   @see arduino.h for pin args to write and read functions
+*/
+typedef uint8_t pin_t;
+
+/**
+  bool timefunc(const unsigned long& now, const unsigned long& last);
+*/
+typedef bool(*timefunc)(const unsigned long&, const unsigned long&);
 
 /**
    This is the base class for LED output management.
@@ -103,7 +114,7 @@ class PrimaryLEDManager : public LEDManager {
 
        @param led
     */
-    PrimaryLEDManager(const int led) : LEDManager(), m_led(led) {}
+    PrimaryLEDManager(const pin_t led) : LEDManager(), m_led(led) {}
 
     /**
        Destructor.
@@ -129,7 +140,7 @@ class PrimaryLEDManager : public LEDManager {
     PrimaryLEDManager& operator=(const PrimaryLEDManager&) = delete;
 
     // Internal object state
-    const int m_led;
+    const pin_t m_led;
 };
 
 /**
@@ -145,7 +156,7 @@ class CompoundLEDManager : public LEDManager {
        @param ledA
        @param ledB
     */
-    CompoundLEDManager(const int ledA, const int ledB) : LEDManager(), m_a(ledA), m_b(ledB) {}
+    CompoundLEDManager(const pin_t ledA, const pin_t ledB) : LEDManager(), m_a(ledA), m_b(ledB) {}
 
     /**
        Destructor.
@@ -184,8 +195,8 @@ class CompoundLEDManager : public LEDManager {
     CompoundLEDManager& operator=(const CompoundLEDManager&) = delete;
 
     // Internal object state
-    const int m_a;
-    const int m_b;
+    const pin_t m_a;
+    const pin_t m_b;
 };
 
 /**
@@ -201,7 +212,7 @@ class WhiteLEDManager : public LEDManager {
        @param green
        @param blue
     */
-    WhiteLEDManager(const int red, const int green, const int blue) : LEDManager(), m_r(red), m_g(green), m_b(blue) {}
+    WhiteLEDManager(const pin_t red, const pin_t green, const pin_t blue) : LEDManager(), m_r(red), m_g(green), m_b(blue) {}
 
     /**
        Destructor.
@@ -253,9 +264,9 @@ class WhiteLEDManager : public LEDManager {
     static const int DIVISOR = 3;
 
     // Internal object state
-    const int m_r;
-    const int m_g;
-    const int m_b;
+    const pin_t m_r;
+    const pin_t m_g;
+    const pin_t m_b;
 };
 
 /**
@@ -303,7 +314,7 @@ class RainbowLEDManager : public LEDManager {
        @param green
        @param blue
     */
-    RainbowLEDManager(const int red, const int green, const int blue) : LEDManager(),
+    RainbowLEDManager(const pin_t red, const pin_t green, const pin_t blue) : LEDManager(),
       m_r(red),
       m_g(green),
       m_b(blue),
@@ -402,9 +413,9 @@ class RainbowLEDManager : public LEDManager {
     static constexpr float SHIFT_STEP = 0.00390625;
 
     // Internal object state
-    const int m_r;
-    const int m_g;
-    const int m_b;
+    const pin_t m_r;
+    const pin_t m_g;
+    const pin_t m_b;
 
     float m_mod;
 
@@ -414,15 +425,10 @@ class RainbowLEDManager : public LEDManager {
 
     // We want our pointers to be mutable, but point to constant memory, hence
     // the 'mutable' keyword.
-    mutable const int* m_dptr;
-    mutable const int* m_iptr;
-    mutable const int* m_zptr;
+    mutable const pin_t* m_dptr;
+    mutable const pin_t* m_iptr;
+    mutable const pin_t* m_zptr;
 };
-
-/**
-  bool timefunc(const unsigned long& now, const unsigned long& last);
-*/
-typedef bool(*timefunc)(const unsigned long&, const unsigned long&);
 
 /**
   Timer utility for managing asynchronous processing without the use of threads.
@@ -498,20 +504,20 @@ class Timer {
     size_t m_length;
 };
 
-//---------- END CLASSES/STRUCTS ----------//
+//---------- END CLASSES/TYPES ----------//
 
 /*
    DIGITAL SETTINGS
 */
 
 // LED Pins
-static const int LED_BLUE = 3;
-static const int LED_GREEN = 5;
-static const int LED_RED = 6;
+static const pin_t LED_BLUE = 3;
+static const pin_t LED_GREEN = 5;
+static const pin_t LED_RED = 6;
 
 // Other Pins
-static const int GND = 2;
-static const int BUTTON = 4;
+static const pin_t GND = 2;
+static const pin_t BUTTON = 4;
 
 //---------- END DIGITAL SETTINGS ----------//
 
@@ -520,8 +526,8 @@ static const int BUTTON = 4;
 */
 
 // Voltage and our LDR are wired to analog pins
-static const int LDR_SENSOR = A0;
-static const int VCC = A1;
+static const pin_t LDR_SENSOR = A0;
+static const pin_t VCC = A1;
 
 //---------- END ANALOG SETTINGS ----------//
 
@@ -563,11 +569,14 @@ static constexpr float LDR_MAP_FACTOR = static_cast<float>(VAL_LOW - VAL_HIGH) /
    APPLICATION STATE
 */
 
-char nextState = 0;
+// digitalRead returns an int
 int prevButton;
 int currButton;
 
-// Helper objects
+// LED state tracking
+uint8_t nextState = 0;
+
+// Object State
 Timer timer;
 LEDManager* lman = nullptr;
 
@@ -713,7 +722,7 @@ bool shift_callback(const unsigned long& now, const unsigned long& last) {
    8: RAINBOW
 */
 void init_next_state() {
-  const int x = nextState++;
+  const uint8_t x = nextState++;
 
   if (lman != nullptr) {
     delete lman;
