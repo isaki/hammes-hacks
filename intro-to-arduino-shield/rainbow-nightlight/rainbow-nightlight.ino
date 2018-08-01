@@ -177,6 +177,7 @@ class CompoundLEDManager : public LEDManager {
     }
 
   private:
+
     // No object copies
     CompoundLEDManager() = delete;
     CompoundLEDManager(const CompoundLEDManager&) = delete;
@@ -647,7 +648,7 @@ void loop() {
   // Take care of any timed tasks
   timer.execute();
 
-  const int brightness = determine_led_brightness(LDR_SENSOR);
+  const int brightness = determine_led_brightness();
   lman->set(brightness);
 }
 
@@ -757,8 +758,8 @@ void init_next_state() {
 
    @return The value representing the total brightness our LED should be using.
 */
-static int determine_led_brightness(const int sensor) {
-  int ret = analogRead(sensor);
+static int determine_led_brightness() {
+  int ret = analogRead(LDR_SENSOR);
   // Due to our constant definitions, this is the equivalent of:
   // map(ret, LDR_READ_MIN, LDR_READ_MAX, VAL_HIGH, VAL_LOW)
   // Note that is faster than map as we eliminate the division on every read.
