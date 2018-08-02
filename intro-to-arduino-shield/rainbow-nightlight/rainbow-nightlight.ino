@@ -543,7 +543,7 @@ static const int LDR_READ_MIN = 50;
 
 // LDR_READ_MAX: The lower the value, the quicker we hit zero brightness as the
 // ambient light increases.
-static const int LDR_READ_MAX = 512;
+static const int LDR_READ_MAX = 306;
 
 // Light Pin Constraints: Digital pins have a square wave voltage controlled by
 // an 8-bit value.
