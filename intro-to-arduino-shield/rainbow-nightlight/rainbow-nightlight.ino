@@ -25,7 +25,11 @@
    This is the type used for pin addressing.
    @see arduino.h for pin args to write and read functions
 */
+#if defined (__AVR_ATmega328P__)
 typedef uint8_t pin_t;
+#else
+#error "Integral type for pin_t has not been configured for this processor"
+#endif
 
 /**
   bool timefunc(const unsigned long& now, const unsigned long& last);
