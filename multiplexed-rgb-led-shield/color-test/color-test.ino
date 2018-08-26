@@ -41,7 +41,7 @@ void loop() {
   }
 
   // This is a test application, so I didn't bother with timers.
-  delay(500);
+  delay(1000);
 
   // Disable the rows for those colors
   for (uint8_t i = 14; i < 20; ++i) {
