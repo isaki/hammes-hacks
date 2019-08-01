@@ -6,6 +6,7 @@ target/
 
 # Vim
 .*.sw[0-9a-zA-Z]
+.sw[0-9a-zA-Z]
 
 # Other temp files
 *~
