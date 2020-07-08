@@ -1,6 +1,6 @@
 /*
   Intro to Arduino Shield: Rainbow Nightlight
-  Author: isaki-x@github
+  Author: isaki@github
   License: Apache 2.0
 
   Acknowledgments:
