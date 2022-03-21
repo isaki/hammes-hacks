@@ -721,7 +721,7 @@ bool shift_callback(const unsigned long& now, const unsigned long& last) {
 /*
    Controls state settings.
 
-   0: WHITE
+   0: RAINBOW
    1: OFF
    2: RED
    3: ORANGE
@@ -729,7 +729,7 @@ bool shift_callback(const unsigned long& now, const unsigned long& last) {
    5: CYAN
    6: BLUE
    7: MAGENTA
-   8: RAINBOW
+   8: WHITE
 */
 void init_next_state() {
   const unsigned char x = nextState++;
